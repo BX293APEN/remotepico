@@ -55,10 +55,12 @@ class RemotePico:
             for btn in self.buttonPin:
                 if btn.value() == 0:
                     self.onboardLED.value(1)
-                    self.irUART.send_data(btn.pinID)
+                    self.irUART.send_data(f"GP{btn.pinID}")
                     self.onboardLED.value(0)
                     utime.sleep_ms(300)
 
 if __name__ == "__main__":
     rp = RemotePico()
     rp.loop()
+
+
