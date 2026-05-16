@@ -34,13 +34,13 @@ class Button(Pin):
 class RemotePico:
     def __init__(self): 
         self.buttonPin          = []
-        self.irUART             = IRUART()
         self.onboardLED         = Pin(25, Pin.OUT)
 
         for p in [0, 4, 7, 8, 11, 15, 19]:
             btn                 = Button(p, Pin.PULL_UP)
             self.buttonPin.append(btn)
-        
+            
+        self.irUART             = IRUART()
         self.led_blinking(3)
     
     def led_blinking(self, count, t = 0.1):
