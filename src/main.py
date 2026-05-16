@@ -18,6 +18,7 @@ class IRUART:
     def send_data(self, pinID):
         cmd             = self.irData.get(pinID, "0,0")
         sendData        = [int(i) for i in cmd.split(",")]
+        # print(sendData)
         self.tx.send(sendData)
 
 
@@ -37,7 +38,7 @@ class RemotePico:
         self.onboardLED         = Pin(25, Pin.OUT)
 
         for p in [0, 4, 7, 8, 11, 15, 19]:
-            btn                 = Button(p, Pin.PULL_UP)
+            btn                 = Button(p, Pin.PULL_UP, setInterrupt = True)
             self.buttonPin.append(btn)
             
         self.irUART             = IRUART()
