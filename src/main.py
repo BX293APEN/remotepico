@@ -24,6 +24,7 @@ class IRUART:
 
 class FLAGS:
     button = ""
+    lastTrigger = 0
 
 class Button(Pin):
     def __init__(self, pinID, mode, setInterrupt = True):
@@ -33,7 +34,11 @@ class Button(Pin):
             self.irq(trigger=Pin.IRQ_FALLING, handler=self.handler)
     
     def handler(self, pin):
-        FLAGS.button = f"GP{self.pinID}"
+        now = utime.ticks_ms()
+        if utime.ticks_diff(now, FLAGS.lastTrigger) < 200: # チャタリング対策
+            return
+        FLAGS.lastTrigger   = now
+        FLAGS.button        = f"GP{self.pinID}"
 
 class RemotePico:
     def __init__(self): 
