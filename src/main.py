@@ -1,6 +1,6 @@
 import utime, json
 from UpyIrTx import UpyIrTx
-from machine import Pin
+from machine import Pin, lightsleep
 
 class IRUART:
     def __init__(
@@ -22,6 +22,9 @@ class IRUART:
         self.tx.send(sendData)
 
 
+class FLAGS:
+    button = ""
+
 class Button(Pin):
     def __init__(self, pinID, mode, setInterrupt = True):
         self.pinID      = pinID
@@ -30,7 +33,7 @@ class Button(Pin):
             self.irq(trigger=Pin.IRQ_FALLING, handler=self.handler)
     
     def handler(self, pin):
-        print(f"GP{self.pinID}")
+        FLAGS.button = f"GP{self.pinID}"
 
 class RemotePico:
     def __init__(self): 
@@ -53,12 +56,14 @@ class RemotePico:
 
     def loop(self):
         while True:
-            for btn in self.buttonPin:
-                if btn.value() == 0:
-                    self.onboardLED.value(1)
-                    self.irUART.send_data(f"GP{btn.pinID}")
-                    self.onboardLED.value(0)
-                    utime.sleep_ms(300)
+            if FLAGS.button != "":
+                self.onboardLED.value(1)
+                self.irUART.send_data(FLAGS.button)
+                FLAGS.button = ""
+                self.onboardLED.value(0)
+                utime.sleep(0.5)
+            
+            lightsleep(5000)
 
 if __name__ == "__main__":
     rp = RemotePico()
