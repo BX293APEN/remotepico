@@ -50,6 +50,7 @@ class RemotePico:
             self.buttonPin.append(btn)
             
         self.irUART             = IRUART()
+        utime.sleep(3)          # KeyboardInterrupt用
         self.led_blinking(3)
     
     def led_blinking(self, count, t = 0.1):
@@ -68,7 +69,7 @@ class RemotePico:
                 self.onboardLED.value(0)
                 utime.sleep(0.5)
             
-            lightsleep(500)
+            lightsleep(5000)
 
 if __name__ == "__main__":
     rp = RemotePico()
