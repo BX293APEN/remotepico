@@ -68,7 +68,7 @@ class RemotePico:
                 self.onboardLED.value(0)
                 utime.sleep(0.5)
             
-            lightsleep(5000)
+            lightsleep(500)
 
 if __name__ == "__main__":
     rp = RemotePico()
